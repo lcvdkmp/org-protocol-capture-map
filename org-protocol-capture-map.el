@@ -12,7 +12,13 @@
                      "pandoc" t t nil "-f" "html" "-t" "org" "--wrap=none")))
         (message "Pandoc failed: %s" (buffer-string))
         ;; Pandoc succeeded
-        (buffer-string))))
+        (progn
+          ;; Pandoc creates org properties for HTML attributes (such ass id, class).
+          ;; Strip these, as we are only interested in text
+          (dolist (prop (org-buffer-property-keys))
+            (org-delete-property-globally prop))
+          (buffer-string)
+          ))))
 
 (defun org-protocol-capture-map--apply-plist-map (plist &optional ftitle fbody)
   "Map PLIST's `:title' and `:body' using FTITLE and FBODY respectively.

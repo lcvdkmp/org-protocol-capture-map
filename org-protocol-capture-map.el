@@ -2,6 +2,9 @@
 
 (require 'org-protocol)
 
+(defcustom org-protocol-capture-map-strip-properties t
+  "Whether to strip pandocs generated properties from body."
+  :group 'org-protocol-capture-map :type 'boolean)
 
 (defun org-protocol-capture-map--pandoc-parse (content)
   "Convert CONTENT from html to org using pandoc."
@@ -15,8 +18,9 @@
         (progn
           ;; Pandoc creates org properties for HTML attributes (such ass id, class).
           ;; Strip these, as we are only interested in text
-          (dolist (prop (org-buffer-property-keys))
-            (org-delete-property-globally prop))
+          (when org-protocol-capture-map-strip-properties 
+            (dolist (prop (org-buffer-property-keys))
+              (org-delete-property-globally prop)))
           (buffer-string)
           ))))
 

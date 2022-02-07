@@ -1,0 +1,29 @@
+#+TITLE: org-protocol-capture-map
+#+DATE:    February 7, 2022
+#+SINCE:   0.1
+#+STARTUP: inlineimages nofold
+
+* Table of Contents :TOC_3:noexport:
+- [[#description][Description]]
+  - [[#maintainers][Maintainers]]
+- [[#prerequisites][Prerequisites]]
+- [[#configuration][Configuration]]
+
+* Description
+A simple module to create org-mode protocols that process the data sent via org-protocol-capture before capturing.
+Defines org-protocols for the following:
+| protocol     | for                                        |
+|--------------+--------------------------------------------|
+| capture-html | convert body from HTML to org with pandoc. |
+
+** Maintainers
++ @lcvdkmp (Author)
+
+* Prerequisites
++ pandoc >= 1.16
++ org-protocol
+
+* Configuration
+#+begin_src elisp
+(use-package org-protocol-capture-map)
+#+end_src

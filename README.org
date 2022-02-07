@@ -3,21 +3,12 @@
 #+SINCE:   0.1
 #+STARTUP: inlineimages nofold
 
-* Table of Contents :TOC_3:noexport:
-- [[#description][Description]]
-  - [[#maintainers][Maintainers]]
-- [[#prerequisites][Prerequisites]]
-- [[#configuration][Configuration]]
-
 * Description
 A simple module to create org-mode protocols that process the data sent via org-protocol-capture before capturing.
 Defines org-protocols for the following:
 | protocol     | for                                        |
 |--------------+--------------------------------------------|
 | capture-html | convert body from HTML to org with pandoc. |
-
-** Maintainers
-+ @lcvdkmp (Author)
 
 * Prerequisites
 + pandoc >= 1.16
@@ -27,3 +18,11 @@ Defines org-protocols for the following:
 #+begin_src elisp
 (use-package org-protocol-capture-map)
 #+end_src
+
+By default, ~org-protocol-capture-map~ adds the ~capture-html~ capture protocol. More map protocols can be defined as follows.
+#+begin_src elisp
+(org-protocol-capture-map-add "capitalize-title"
+                              :protocol "capitalize-title"
+                              :ftitle #'capitalize)
+#+end_src
+This creates a new org-protocol that capitalizes the title.

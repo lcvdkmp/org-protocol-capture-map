@@ -22,8 +22,7 @@
           (when org-protocol-capture-map-strip-properties 
             (dolist (prop (org-buffer-property-keys))
               (org-delete-property-globally prop)))
-          (buffer-string)
-          ))))
+          (buffer-string)))))
 
 (cl-defmacro org-protocol-capture-map-add (module-name &key protocol function kill-client ftitle fbody)
   "Construct a org-protocol with aditional title and body maps.
@@ -50,8 +49,7 @@ FTITLE and FBODY should be functions taking a string, and producing a string."
 
        ;; construct the protocol, injecting our own function into the protocol
        (add-to-list 'org-protocol-protocol-alist
-                    '(,module-name :function ,cf :protocol ,protocol :kill-client ,kill-client)
-    ))))
+                    '(,module-name :function ,cf :protocol ,protocol :kill-client ,kill-client)))))
 
 
 ;; interface

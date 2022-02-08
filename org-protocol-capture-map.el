@@ -30,26 +30,27 @@ for MODULE-NAME, PROTOCOL, FUNCTION, and KILL-ClIENT see the definition of `org-
 Map the parsed title and body using FTITLE and FBODY respectively.
 FTITLE and FBODY should be functions taking a string, and producing a string."
  (let ((ma (intern (concat "org-protocol-capture-map--" module-name "-advice")))
-       (cf (intern (concat "org-protocol-capture-map--" module-name "-hijack"))))
-    `(progn
-       (defun ,ma (plist)
+       (cf (intern (concat "org-protocol-capture-map--" module-name "-hijack")))
+       ;; execute protocol function when defined, otherwise fallback to org-protocol-capture
+       (fun (or (symbol-function function) 'org-protocol-capture)))
+   `(if (or ,ftitle ,fbody)
+        (progn
+          (defun ,ma (plist)
             (when ,ftitle (plist-put plist :title (funcall ,ftitle (plist-get plist :title))))
             (when ,fbody (plist-put plist :body (funcall ,fbody (plist-get plist :body)))))
 
-       ;; construe a function that adds ,ma as advice around protocol function call
-       (defun ,cf (data)
-         (advice-add 'org-protocol-parse-parameters
-                     :filter-return ',ma)
-         ;; execute protocol function when defined, otherwise fallback to org-protocol-capture
-         (if (symbol-function ,function)
-             (funcall ,function data)
-           (org-protocol-capture data))
+          ;; construe a function that adds ,ma as advice around protocol function call
+          (defun ,cf (data)
+            (advice-add 'org-protocol-parse-parameters
+                        :filter-return ',ma)
+            (funcall ,fun data)
+            (advice-remove 'org-protocol-parse-parameters ',ma))
 
-         (advice-remove 'org-protocol-parse-parameters ',ma))
-
-       ;; construct the protocol, injecting our own function into the protocol
-       (add-to-list 'org-protocol-protocol-alist
-                    '(,module-name :function ,cf :protocol ,protocol :kill-client ,kill-client)))))
+          ;; construct the protocol, injecting our own function into the protocol
+          (add-to-list 'org-protocol-protocol-alist
+                       '(,module-name :function ,cf :protocol ,protocol :kill-client ,kill-client)))
+      (add-to-list 'org-protocol-protocol-alist
+                   '(,module-name :function ,fun :protocol ,protocol :kill-client ,kill-client)))))
 
 
 ;; interface

@@ -26,3 +26,6 @@ By default, ~org-protocol-capture-map~ adds the ~capture-html~ capture protocol.
                               :ftitle #'capitalize)
 #+end_src
 This creates a new org-protocol that capitalizes the title.
+
+* Similar modules
++ [[https://github.com/alphapapa/org-protocol-capture-html][org-protocol-capture-html]]

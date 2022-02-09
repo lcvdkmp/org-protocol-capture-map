@@ -35,7 +35,7 @@ FTITLE and FBODY should be functions taking a string, and producing a string."
  (let ((ma (intern (concat "org-protocol-capture-map--" module-name "-advice")))
        (cf (intern (concat "org-protocol-capture-map--" module-name "-hijack")))
        ;; execute protocol function when defined, otherwise fallback to org-protocol-capture
-       (fun (or (symbol-function function) 'org-protocol-capture)))
+       (fun (or (symbol-function function) (symbol-function #'org-protocol-capture))))
    `(if (or ,ftitle ,fbody)
         (progn
           (defun ,ma (plist)

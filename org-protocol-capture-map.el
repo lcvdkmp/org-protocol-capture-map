@@ -13,6 +13,9 @@
     (insert content)
     (if (not (zerop (call-process-region
                      (point-min) (point-max)
+                     ;; --wrap=none is not available for very old pandoc versions
+                     ;; and --no-wrap should be used instead.
+                     ;; See https://github.com/alphapapa/org-protocol-capture-html
                      "pandoc" t t nil "-f" "html" "-t" "org" "--wrap=none")))
         (message "Pandoc failed: %s" (buffer-string))
         ;; Pandoc succeeded
